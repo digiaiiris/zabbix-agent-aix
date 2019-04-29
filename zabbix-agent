@@ -1,0 +1,55 @@
+#!/opt/freeware/bin/bash
+
+#
+# Start Zabbix-agent daemon on server start
+# Stop Zabbix-agent daemon on server shutdown
+#
+
+PROG="zabbix-agent"
+CONF="/opt/freeware/zabbix/etc/zabbix_agentd.conf"
+DAEMON="/opt/freeware/zabbix/sbin/zabbix_agentd"
+PIDFILE="/var/zabbix/zabbix_agentd.pid"
+
+# if daemon exist and is executable, then run it with agent configuration file
+start() {
+  if [ -x ${DAEMON} ]
+  then
+    $DAEMON -c ${CONF}
+    echo "${PROG} started."
+  else
+    echo "Can't find file ${DAEMON}."
+    echo "${PROG} NOT started."
+  fi
+}
+
+# Check if agent pid file exists and it's size is greater than 0
+# Kill process based on it's process id
+stop() {
+    if [ -s ${PIDFILE} ]
+    then
+      if kill `cat ${PIDFILE}` >/dev/null 2>&1
+      then
+        echo "${PROG} terminated."
+        rm -f ${PIDFILE}
+      fi
+    fi
+}
+
+case "$1" in
+    start)
+        start
+	;;
+    stop)
+        stop
+	;;
+    restart)
+        stop
+        start
+	;;
+    status)
+        echo "Not implemented yet"
+	;;
+    *)
+        echo "Usage: $0 {start|stop|status|restart}"
+	;;
+esac
