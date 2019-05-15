@@ -58,9 +58,9 @@ else
   mkuser pgrp='zabbix' groups='zabbix' zabbix
 fi
 
-# Check that script.gz.tar exists
-if [ ! -e scripts ]; then
-  echo "Script package missing from installation folder."
+echo "Checking that monitoring scripts package exists."
+if [ ! -e zabbix-monitoring-scripts-aix.tar.gz ]; then
+  echo "zabbix-monitoring-scripts-aix.tar.gz package is missing from installation folder."
   exit 1
 fi
 
@@ -100,7 +100,7 @@ else
   exit 1
 fi
 
-echo "Installing monitoring scripts under /opt/freeware/zabbix/
+echo "Installing monitoring scripts under /opt/freeware/zabbix/"
 gunzip zabbix-monitoring-scripts-aix.tar.gz
 tar -xvf zabbix-monitoring-scripts-aix.tar -C /opt/freeware/zabbix/
 chown -R zabbix:zabbix /opt/freeware/zabbix/zabbix_agentd.conf.d
