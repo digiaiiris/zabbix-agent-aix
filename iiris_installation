@@ -76,7 +76,7 @@ elif [ ! -e zabbix-agent-3.0.7-1.aix6.1.ppc.rpm ]; then
 else
   echo "Installing rpm-package"
   rpm -Uhvh --prefix=/opt/freeware/zabbix/ zabbix-agent-3.0.7-1.aix6.1.ppc.rpm
-  chmod -R zabbix:system /opt/freeware/zabbix/
+  chown -R zabbix:system /opt/freeware/zabbix/
 fi
 
 
@@ -102,8 +102,8 @@ fi
 
 echo "Installing monitoring scripts under /opt/freeware/zabbix/"
 gunzip zabbix-monitoring-scripts-aix.tar.gz
-tar -xvf zabbix-monitoring-scripts-aix.tar -C /opt/freeware/zabbix/
-chown -R zabbix:system /opt/freeware/zabbix/zabbix_agentd.conf.d
-chown -R zabbix:system /opt/freeware/zabbix/scripts
+tar -xvf zabbix-monitoring-scripts-aix.tar -C /opt/freeware/zabbix/etc/
+chown -R zabbix:system /opt/freeware/zabbix/etc/zabbix_agentd.conf.d
+chown -R zabbix:system /opt/freeware/zabbix/etc/scripts
 
 echo "Installation done."
