@@ -44,18 +44,24 @@ if [ $flag -eq 1 ]; then
   fi
 fi
 
-if [ $(grep zabbix /etc/group | wc -l) -eq 1 ]; then
+if [ $(grep zabbix /etc/group | wc -l) -gt 0 ]; then
   echo "Zabbix group already exists"
 else
   echo "Creating user group for Zabbix"
   mkgroup zabbix
 fi
 
-if [ $(grep zabbix /etc/passwd | wc -l) -eq 1 ]; then
+if [ $(grep zabbix /etc/passwd | wc -l) -gt 0 ]; then
   echo "Zabbix user already exists"
 else
   echo "Creating user for Zabbix agent"
   mkuser pgrp='zabbix' groups='zabbix' zabbix
+fi
+
+# Check that script.gz.tar exists
+if [ ! -e scripts ]; then
+  echo "Script package missing from installation folder."
+  exit 1
 fi
 
 echo "Creating installation folder for Zabbix agent under /opt/freeware/, if already not exist"
@@ -73,9 +79,15 @@ else
   rpm -Uhvh --prefix=/opt/freeware/zabbix/ zabbix-agent-3.0.7-1.aix6.1.ppc.rpm
 fi
 
+# Default configuration changes
+# Do not specify Hostname but use system hostname by default
+sed -i '/^Hostname=Zabbix server/d' opt/freeware/zabbix/etc/zabbix_agentd.conf
+# Bigger timeout
+sed -i '/^# Timeout=3/a Timeout=15' opt/freeware/zabbix/etc/zabbix_agentd.conf
+
 echo "Making logging folder for zabbix and changing it's permissions under /var/log/"
 mkdir -p /var/log/zabbix
-chown -R zabbix:zabbix /var/log/zabbix
+chown -R zabbix:system /var/log/zabbix
 chmod -R o+r /var/log/zabbix
 
 echo "Making pid-file folder for zabbix and changing it's permissions under /var/run/"
