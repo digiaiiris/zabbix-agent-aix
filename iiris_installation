@@ -70,22 +70,28 @@ mkdir -p /opt/freeware/zabbix
 if [ -e /opt/freeware/zabbix/sbin/zabbix_agentd ]; then
   echo "Zabbix agent already installed, please remove it first."
   exit 1
-elif [ ! -e zabbix-agent-3.0.7-1.aix6.1.ppc.rpm ]; then
-  echo "Zabbix-agent rpm-package not found"
+elif [ ! -e zabbix_agents_4.2.1.aix7_2.power.openssl.tar.gz ]; then
+  echo "Zabbix-agent package zabbix_agents_4.2.1.aix7_2.power.openssl.tar.gz is missing from installation folder."
   exit 1
-else
-  echo "Installing rpm-package"
-  rpm -Uhvh --prefix=/opt/freeware/zabbix/ zabbix-agent-3.0.7-1.aix6.1.ppc.rpm
-  chown -R zabbix:system /opt/freeware/zabbix/
 fi
 
+echo "Installing zabbix agent"
+gunzip zabbix_agents_4.2.1.aix7_2.power.openssl.tar.gz
+rm -fr zabbix_agent
+mkdir -p zabbix_agent
+tar xvf zabbix_agents_4.2.1.aix7_2.power.openssl.tar -C zabbix_agent
+cp -r zabbix_agent/bin /opt/freeware/zabbix/
+cp -r zabbix_agent/conf /opt/freeware/zabbix/
+cp -r zabbix_agent/sbin /opt/freeware/zabbix/
+cp -r zabbix_agent/share /opt/freeware/zabbix/
+chown -R zabbix:system /opt/freeware/zabbix/
 
-echo "Making logging folder for zabbix and changing it's permissions under /var/log/"
+echo "Making logging folder for zabbix and changing its permissions under /var/log/"
 mkdir -p /var/log/zabbix
 chown -R zabbix:system /var/log/zabbix
 chmod -R o+r /var/log/zabbix
 
-echo "Making pid-file folder for zabbix and changing it's permissions under /var/run/"
+echo "Making pid-file folder for zabbix and changing its permissions under /var/run/"
 mkdir -p /var/run/zabbix/
 chown -R zabbix:system /var/run/zabbix
 chmod -R o+r /var/run/zabbix
@@ -102,8 +108,7 @@ fi
 
 echo "Installing monitoring scripts under /opt/freeware/zabbix/"
 gunzip zabbix-monitoring-scripts-aix.tar.gz
-tar -xvf zabbix-monitoring-scripts-aix.tar -C /opt/freeware/zabbix/etc/
-chown -R zabbix:system /opt/freeware/zabbix/etc/zabbix_agentd.conf.d
-chown -R zabbix:system /opt/freeware/zabbix/etc/scripts
+tar -xvf zabbix-monitoring-scripts-aix.tar -C /opt/freeware/zabbix/conf/
+chown -R zabbix:system /opt/freeware/zabbix/conf
 
 echo "Installation done."
