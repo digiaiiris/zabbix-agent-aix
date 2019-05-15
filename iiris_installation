@@ -66,7 +66,6 @@ fi
 
 echo "Creating installation folder for Zabbix agent under /opt/freeware/, if already not exist"
 mkdir -p /opt/freeware/zabbix
-chgrp -R zabbix /opt/freeware/zabbix/
 
 if [ -e /opt/freeware/zabbix/sbin/zabbix_agentd ]; then
   echo "Zabbix agent already installed, please remove it first."
@@ -77,13 +76,9 @@ elif [ ! -e zabbix-agent-3.0.7-1.aix6.1.ppc.rpm ]; then
 else
   echo "Installing rpm-package"
   rpm -Uhvh --prefix=/opt/freeware/zabbix/ zabbix-agent-3.0.7-1.aix6.1.ppc.rpm
+  chmod -R zabbix:system /opt/freeware/zabbix/
 fi
 
-# Default configuration changes
-# Do not specify Hostname but use system hostname by default
-sed -i '/^Hostname=Zabbix server/d' opt/freeware/zabbix/etc/zabbix_agentd.conf
-# Bigger timeout
-sed -i '/^# Timeout=3/a Timeout=15' opt/freeware/zabbix/etc/zabbix_agentd.conf
 
 echo "Making logging folder for zabbix and changing it's permissions under /var/log/"
 mkdir -p /var/log/zabbix
