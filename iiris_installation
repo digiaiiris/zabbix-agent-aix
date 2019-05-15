@@ -1,8 +1,5 @@
 #!/opt/freeware/bin/bash
 
-# Variables
-install_location="/opt/freeware/"
-
 # Check dependencies
 echo "Checking dependencies..."
 expat_version=$(rpm -qa|grep expat 2>&1)
@@ -38,26 +35,13 @@ fi
 # If missmatch is found between required dependencies, ask user if thats ok
 if [ $flag -eq 1 ]; then
   echo "There was exception with dependencies."
+  echo "Please update older versions. Newer versions might work."
   read -p "Continue y/n?" -n 1 -r
   echo
   if [[ "$REPLY" =~ ^[nN]$ ]]; then
     echo "Exiting."
     exit 1
   fi
-fi
-
-echo "Creating installation folder for Zabbix agent under /opt/freeware/, if already not exist"
-mkdir -p /opt/freeware/zabbix
-
-if [ -e /opt/freeware/zabbix/sbin/zabbix_agentd ]; then
-  echo "Zabbix agent already installed, please remove it first."
-  exit 1
-elif [ ! -e zabbix-agent-3.0.7-1.aix6.1.ppc.rpm ]; then
-  echo "Zabbix-agent rpm-package not found"
-  exit 1
-else
-  echo "Installing rpm-package"
-  rpm -Uhvh --prefix=/opt/freeware/zabbix/ zabbix-agent-3.0.7-1.aix6.1.ppc.rpm
 fi
 
 if [ $(grep zabbix /etc/group | wc -l) -eq 1 ]; then
@@ -74,13 +58,30 @@ else
   mkuser pgrp='zabbix' groups='zabbix' zabbix
 fi
 
+echo "Creating installation folder for Zabbix agent under /opt/freeware/, if already not exist"
+mkdir -p /opt/freeware/zabbix
+chgrp -R zabbix /opt/freeware/zabbix/
+
+if [ -e /opt/freeware/zabbix/sbin/zabbix_agentd ]; then
+  echo "Zabbix agent already installed, please remove it first."
+  exit 1
+elif [ ! -e zabbix-agent-3.0.7-1.aix6.1.ppc.rpm ]; then
+  echo "Zabbix-agent rpm-package not found"
+  exit 1
+else
+  echo "Installing rpm-package"
+  rpm -Uhvh --prefix=/opt/freeware/zabbix/ zabbix-agent-3.0.7-1.aix6.1.ppc.rpm
+fi
+
 echo "Making logging folder for zabbix and changing it's permissions under /var/log/"
 mkdir -p /var/log/zabbix
 chown -R zabbix:zabbix /var/log/zabbix
+chmod -R o+r /var/log/zabbix
 
 echo "Making pid-file folder for zabbix and changing it's permissions under /var/run/"
 mkdir -p /var/run/zabbix/
-chown -R zabbix:zabbix /var/run/zabbix
+chown -R zabbix:system /var/run/zabbix
+chmod -R o+r /var/run/zabbix
 
 echo "Moving start and stop scripts under /etc/rc.d/init.d/ and linking it to run level directory"
 if [ -e zabbix-agent ]; then

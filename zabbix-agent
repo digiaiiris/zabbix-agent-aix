@@ -8,7 +8,7 @@
 PROG="zabbix-agent"
 CONF="/opt/freeware/zabbix/etc/zabbix_agentd.conf"
 DAEMON="/opt/freeware/zabbix/sbin/zabbix_agentd"
-PIDFILE="/var/zabbix/zabbix_agentd.pid"
+PIDFILE="/var/run/zabbix/zabbix_agentd.pid"
 
 # if daemon exist and is executable, then run it with agent configuration file
 start() {
