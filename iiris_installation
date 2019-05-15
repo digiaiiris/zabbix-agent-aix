@@ -93,4 +93,9 @@ else
   exit 1
 fi
 
+echo "Installing monitoring scripts under /opt/freeware/zabbix/
+tar zxvf zabbix-monitoring-scripts-aix.tar.gz --directory=/opt/freeware/zabbix --strip-components=1
+chown -R zabbix:zabbix /opt/freeware/zabbix/zabbix_agentd.conf.d
+chown -R zabbix:zabbix /opt/freeware/zabbix/scripts
+
 echo "Installation done."
