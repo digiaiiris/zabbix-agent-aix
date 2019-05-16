@@ -106,6 +106,10 @@ else
   exit 1
 fi
 
+# AIX installation package tar.gz contain example confs that are broken...
+echo "Removing old monitoring scripts"
+rm -f /opt/freeware/zabbix/conf/zabbix_agentd/*
+
 echo "Installing monitoring scripts under /opt/freeware/zabbix/"
 gunzip zabbix-monitoring-scripts-aix.tar.gz
 tar -xvf zabbix-monitoring-scripts-aix.tar -C /opt/freeware/zabbix/conf/
