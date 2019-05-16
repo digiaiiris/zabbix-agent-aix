@@ -6,7 +6,7 @@
 #
 
 PROG="zabbix-agent"
-CONF="/opt/freeware/zabbix/etc/zabbix_agentd.conf"
+CONF="/opt/freeware/zabbix/conf/zabbix_agentd.conf"
 DAEMON="/opt/freeware/zabbix/sbin/zabbix_agentd"
 PIDFILE="/var/run/zabbix/zabbix_agentd.pid"
 
