@@ -2,40 +2,29 @@
 
 # Check dependencies
 echo "Checking dependencies..."
-expat_version=$(rpm -qa|grep expat 2>&1)
+
 flag=0
-if [[ "${expat_version}" != "expat-2.1.0-1.ppc" ]]; then
-  echo "Expat version is not equal to dependented 2.1.0-1 version."
-  flag=1
-else
-  echo "expat ok"
-fi
-gettext_version=$(rpm -qa|grep gettext 2>&1)
-if [[ "${gettext_version}" != "gettext-0.17-8.ppc" ]]; then
-  echo "${gettext_version} is not equal to dependented 0.17-8 version."
-  flag=1
-else
-  echo "gettext ok"
-fi
+
 glib_version=$(rpm -qa|grep glib 2>&1)
-if [[ "${glib_version}" != "glib2-2.14.6-2.ppc" ]]; then
-  echo "${glib_version} is not equal to dependented 2.14.6-2 version."
+if [[ -z "${glib_version}" ]]; then
+  echo "Glib2 library is required for agent. Currently there is no glib installed."
   flag=1
 else
-  echo "glib ok"
+  echo "glib ok, current version is ${glib_version}"
 fi
-libicon_version=$(rpm -qa|grep libicon 2>&1)
-if [[ "${libicon_version}" != "libiconv-1.14-1.ppc" ]]; then
-  echo "${libicon_version} is not equal to dependented 1.14-1 version."
+
+libiconv_version=$(rpm -qa|grep libiconv 2>&1)
+if [[ -z "${libiconv_version}" ]]; then
+  echo "Libiconv library is required for agent. Currently there is no libiconv installed."
   flag=1
 else
-  echo "libicon ok"
+  echo "libiconv ok, current version is ${libiconv_version}"
 fi
 
 # If missmatch is found between required dependencies, ask user if thats ok
 if [ $flag -eq 1 ]; then
-  echo "There was exception with dependencies."
-  echo "Please update older versions. Newer versions might work."
+  echo "There was exception with dependencies. Check above."
+
   read -p "Continue y/n?" -n 1 -r
   echo
   if [[ "$REPLY" =~ ^[nN]$ ]]; then
