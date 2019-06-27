@@ -68,7 +68,7 @@ echo "Installing zabbix agent"
 gunzip zabbix_agents_4.0.7.aix7_2.power.openssl.tar.gz
 rm -fr zabbix_agent
 mkdir -p zabbix_agent
-tar xvf zabbix_agents_4.0.7.aix7_2.power.openssl.tar.gz -C zabbix_agent
+tar xvf zabbix_agents_4.0.7.aix7_2.power.openssl.tar -C zabbix_agent
 cp -r zabbix_agent/bin /opt/freeware/zabbix/
 cp -r zabbix_agent/conf /opt/freeware/zabbix/
 cp -r zabbix_agent/sbin /opt/freeware/zabbix/
