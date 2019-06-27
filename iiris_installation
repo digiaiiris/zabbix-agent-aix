@@ -60,15 +60,15 @@ if [ -e /opt/freeware/zabbix/sbin/zabbix_agentd ]; then
   echo "Zabbix agent already installed, please remove it first."
   exit 1
 elif [ ! -e zabbix_agents_4.0.7.aix7_2.power.openssl.tar.gz ]; then
-  echo "Zabbix-agent package zabbix_agents_4.0.1.aix7_2.power.openssl.tar.gz is missing from installation folder."
+  echo "Zabbix-agent package zabbix_agents_4.0.7.aix7_2.power.openssl.tar.gz is missing from installation folder."
   exit 1
 fi
 
 echo "Installing zabbix agent"
-gunzip zabbix_agents_4.0.1.aix7_2.power.openssl.tar.gz
+gunzip zabbix_agents_4.0.7.aix7_2.power.openssl.tar.gz
 rm -fr zabbix_agent
 mkdir -p zabbix_agent
-tar xvf zabbix_agents_4.0.1.aix7_2.power.openssl.tar -C zabbix_agent
+tar xvf zabbix_agents_4.0.7.aix7_2.power.openssl.tar.gz -C zabbix_agent
 cp -r zabbix_agent/bin /opt/freeware/zabbix/
 cp -r zabbix_agent/conf /opt/freeware/zabbix/
 cp -r zabbix_agent/sbin /opt/freeware/zabbix/
