@@ -84,11 +84,10 @@ mkdir -p /var/run/zabbix/
 chown -R zabbix:system /var/run/zabbix
 chmod -R o+r /var/run/zabbix
 
-echo "Moving start and stop scripts under /etc/rc.d/init.d/ and linking it to run level directory"
+echo "Moving start and stop scripts under /opt/freeware/zabbix. Overwritten if already exists."
 if [ -e zabbix-agent ]; then
-  cp zabbix-agent /etc/rc.d/init.d/
-  ln -s -f /etc/rc.d/init.d/zabbix-agent /etc/rc.d/rc2.d/Szabbix-agent
-  ln -s -f /etc/rc.d/init.d/zabbix-agent /etc/rc.d/rc2.d/Kzabbix-agent
+  cp -fr zabbix-agent /opt/freeware/zabbix
+  chown zabbix:system /opt/freeware/zabbix/zabbix-agent
 else
   echo "Cant find zabbix-agent script. Make sure it is in the same folder with this installation script"
   exit 1
